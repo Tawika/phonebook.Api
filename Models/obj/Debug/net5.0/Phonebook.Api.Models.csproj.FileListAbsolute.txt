@@ -1,0 +1,15 @@
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\bin\Debug\net5.0\Phonebook.Api.Models.deps.json
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\bin\Debug\net5.0\Phonebook.Api.Models.runtimeconfig.json
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\bin\Debug\net5.0\Phonebook.Api.Models.runtimeconfig.dev.json
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\bin\Debug\net5.0\Phonebook.Api.Models.dll
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\bin\Debug\net5.0\ref\Phonebook.Api.Models.dll
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\bin\Debug\net5.0\Phonebook.Api.Models.pdb
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\Phonebook.Api.Models.csprojAssemblyReference.cache
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\Phonebook.Api.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\Phonebook.Api.Models.AssemblyInfoInputs.cache
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\Phonebook.Api.Models.AssemblyInfo.cs
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\Phonebook.Api.Models.csproj.CoreCompileInputs.cache
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\Phonebook.Api.Models.dll
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\ref\Phonebook.Api.Models.dll
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\Phonebook.Api.Models.pdb
+C:\Users\tnyathi\Desktop\Tawika - Personal\Development\ABSA Technical Assessment\Api\PhonebookApi\Models\obj\Debug\net5.0\Phonebook.Api.Models.genruntimeconfig.cache
