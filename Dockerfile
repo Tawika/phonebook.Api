@@ -3,11 +3,16 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
+#EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["PhonebookApi/PhonebookApi.csproj", "PhonebookApi/"]
+
+COPY .. ./
+
+COPY ./*/*.csproj ./
+RUN for file in $(ls *.csproj); do mkdir -p src/${file%.*}/ && mv $file src/${file%.*}/; done
+
 RUN dotnet restore "PhonebookApi/PhonebookApi.csproj"
 COPY . .
 WORKDIR "/src/PhonebookApi"
