@@ -1,13 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Models.Database;
 using OfficeOpenXml;
-using PhonebookApi.Models.Extensions;
+using PhonebookApi.Models.Database.Repository;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PhonebookApi.Models.Models.Phonebook.Query
@@ -19,35 +15,33 @@ namespace PhonebookApi.Models.Models.Phonebook.Query
     public const string errorMessage_PageSize = "Page Size cannot be 0.";
     public const string errorMessage_SortColumn = "Sort column doesn't exist.";
 
-    private readonly DatabaseContext _database;
+    private readonly PhonebookRepository _repository;
 
-    public PhonebookQueryService(DatabaseContext database)
+    public PhonebookQueryService(PhonebookRepository repository)
     {
-      _database = database;
+      _repository = repository;
     }
 
     public async Task<List<Phonebook>> GetPhonebookAsync()
     {
-      return await this._database.Phonebooks.Include("Entries").AsNoTracking().ToListAsync().ConfigureAwait(false);
+      return await _repository.GetAllPhonebooks().ConfigureAwait(false);
     }
 
     public async Task<Phonebook> GetPhonebookWithPagedEntries(int pageSize, int pageNo, string searchStr, string sortColumn, bool sortDesc)
     {
       // Check pageSize
       if (pageSize == 0) throw new Exception(errorMessage_PageSize);
-      
-      Phonebook searchResult = await this._database.Phonebooks.Include(c => c.Entries.Where(d => string.IsNullOrEmpty(searchStr) ||
-                                                                           (!string.IsNullOrEmpty(searchStr) && (EF.Functions.Like(d.Name, $"%{searchStr}%") || EF.Functions.Like(d.PhoneNumber, $"%{searchStr}%")))
-                                                                      )).AsNoTracking().FirstOrDefaultAsync().ConfigureAwait(false);
 
       // Check sortColumn 
       string propertyName = ActualPropertyName(typeof(Entry.Entry), sortColumn);
-      if (string.IsNullOrEmpty(propertyName)) throw new Exception(errorMessage_SortColumn);
+      return string.IsNullOrEmpty(propertyName)
+          ? throw new ArgumentNullException(nameof(sortColumn))
+          : await this._repository.GetPhonebookWithPagedEntries(pageSize, pageNo, searchStr, propertyName, sortDesc).ConfigureAwait(false);
+    }
 
-      // Replace current entries with ordered entries
-      searchResult.Entries = searchResult.Entries.AsQueryable().OrderByMember(propertyName, sortDesc).Skip(pageSize * pageNo).Take(pageSize).ToList();
-
-      return searchResult;
+    public async Task<bool> GetPhonebookExistsAsync()
+    {
+      return await this._repository.GetAll(entries).AnyAsync().ConfigureAwait(false);
     }
 
     public async Task<byte[]> DownloadPhonebook()
@@ -58,7 +52,7 @@ namespace PhonebookApi.Models.Models.Phonebook.Query
 
       ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(entries);
 
-      Phonebook phonebook = await this._database.Phonebooks.Include(c => c.Entries).FirstOrDefaultAsync().ConfigureAwait(false);
+      Phonebook phonebook = await this._repository.GetAll(entries).FirstOrDefaultAsync().ConfigureAwait(false);
 
       _ = phonebook ?? throw new Exception(errorMessage_NoPhonebookFound);
 
@@ -84,11 +78,6 @@ namespace PhonebookApi.Models.Models.Phonebook.Query
       }
 
       return package.GetAsByteArray();
-    }
-
-    public async Task<bool> GetPhonebookExistsAsync()
-    {
-      return await this._database.Phonebooks.AsNoTracking().AnyAsync().ConfigureAwait(false);
     }
 
     private static string ActualPropertyName(Type type, string name)

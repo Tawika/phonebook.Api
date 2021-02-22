@@ -5,17 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PhonebookApi.Models.Database.Repository;
 
 namespace PhonebookApi.ModelsTest.Initializer
 {
   public class Initializer
   {
     public DatabaseContext _context { get; init; }
+    public PhonebookRepository _phonebookRepository { get; set; }
     public const string DatabaseName = "Test Phonebook";
 
     public Initializer()
     {
       _context = SetUpDatabase();
+      _phonebookRepository = new PhonebookRepository(_context);
     }
 
     private DatabaseContext SetUpDatabase()

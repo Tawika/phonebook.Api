@@ -1,16 +1,17 @@
 ﻿namespace PhonebookApi.Models.Models.Phonebook.Command
 {
   using global::Models.Database;
+  using PhonebookApi.Models.Database.Repository;
   using System.Collections.Generic;
   using System.Threading.Tasks;
 
   public class PhonebookCommandService
   {
-    private readonly DatabaseContext _database;
+    private readonly PhonebookRepository _repository;
 
-    public PhonebookCommandService(DatabaseContext database)
+    public PhonebookCommandService(PhonebookRepository repository)
     {
-      _database = database;
+      _repository = repository;
     }
 
     public async Task<bool> SavePhonebookAsync(CreatePhonebookCommand createPhonebookCommand)
@@ -31,9 +32,9 @@
         newPhonebook.Entries.Add(newEntry);
       });
 
-      this._database.Phonebooks.Add(newPhonebook);
+      this._repository.Add(newPhonebook);
 
-      return await this._database.SaveChangesAsync().ConfigureAwait(false) > 0;
+      return await this._repository.SaveChanges().ConfigureAwait(false);
     }
   }
 }

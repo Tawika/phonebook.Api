@@ -1,4 +1,5 @@
 ﻿using Models.Database;
+using PhonebookApi.Models.Database.Repository;
 using PhonebookApi.Models.Models.Entry;
 using PhonebookApi.Models.Models.Phonebook.Query;
 using System;
@@ -14,11 +15,13 @@ namespace PhonebookApi.ModelsTest.Tests
   [Collection("Database collection")]
   public class PhonebookQueryServiceTests
   {
-    private readonly DatabaseContext _context;
+    private readonly PhonebookRepository _phonebookRepository;
+    private readonly PhonebookQueryService _queryService;
 
     public PhonebookQueryServiceTests(Initializer.Initializer initializer)
     {
-      _context = initializer._context;
+      _phonebookRepository = initializer._phonebookRepository;
+      _queryService = new PhonebookQueryService(_phonebookRepository);
     }
 
     [Fact]
@@ -31,10 +34,9 @@ namespace PhonebookApi.ModelsTest.Tests
       // The expected behavior when the scenario is invoked.
 
       // Arrange
-      PhonebookQueryService queryService = new PhonebookQueryService(_context);
 
       // Act
-      var result = queryService.GetPhonebookAsync().GetAwaiter().GetResult();
+      var result = _queryService.GetPhonebookAsync().GetAwaiter().GetResult();
 
       // Assert
       Assert.True(result is List<PhonebookApi.Models.Models.Phonebook.Phonebook>);
@@ -48,11 +50,10 @@ namespace PhonebookApi.ModelsTest.Tests
       Type type = typeof(PhonebookQueryService);
       Type EntryType = typeof(Entry);
 
-      PhonebookQueryService queryService = new PhonebookQueryService(_context);
       MethodInfo method = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Static).Where(x => x.Name == "ActualPropertyName" && x.IsPrivate).First();
 
       // Act
-      string result = (string)method.Invoke(queryService, new object[] { EntryType, "name" });
+      string result = (string)method.Invoke(_queryService, new object[] { EntryType, "name" });
 
       // Assert
       Assert.True(result == "Name");
@@ -63,10 +64,9 @@ namespace PhonebookApi.ModelsTest.Tests
     public void GetPhonebookWithPagedEntries_SearchTextIsSam_PhonebookWithSamEntry()
     {
       // Arrange
-      PhonebookQueryService queryService = new PhonebookQueryService(_context);
 
       // Act
-      PhonebookApi.Models.Models.Phonebook.Phonebook result = queryService.GetPhonebookWithPagedEntries(5, 0, "sam", "name", true).GetAwaiter().GetResult();
+      PhonebookApi.Models.Models.Phonebook.Phonebook result = _queryService.GetPhonebookWithPagedEntries(5, 0, "sam", "name", true).GetAwaiter().GetResult();
 
       // Assert
       Assert.True(result!.Entries.Count == 1);
@@ -77,13 +77,18 @@ namespace PhonebookApi.ModelsTest.Tests
     public void GetPhonebookWithPagedEntries_IncorrectSortColumn_Exception()
     {
       // Arrange
-      PhonebookQueryService queryService = new PhonebookQueryService(_context);
 
       // Act
-      Action act = () => queryService.GetPhonebookWithPagedEntries(5, 0, "sam", "hello", true).GetAwaiter().GetResult();
+      Action act = () => _queryService.GetPhonebookWithPagedEntries(5, 0, "sam", "hello", true).GetAwaiter().GetResult();
 
       // Assert
       Assert.Throws<Exception>(act);
+    }
+
+    [Fact]
+    public void GetPhonebookExistsAsync_CheckIfPhonebookExists_True()
+    {
+      Assert.True(_queryService.GetPhonebookExistsAsync().Result);
     }
   }
 }
