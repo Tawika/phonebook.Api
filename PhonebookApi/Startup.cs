@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PhonebookApi.Extensions;
 
 namespace PhonebookApi
 {
@@ -21,7 +22,7 @@ namespace PhonebookApi
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddDataServices();
-      services.AddDatabaseServicesInMemorySQLlite();
+      services.AddDatabaseServicesInMemorySQLlite(Configuration);
 
       services.AddControllers();
       services.AddSwaggerGen(c =>
@@ -38,7 +39,7 @@ namespace PhonebookApi
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
       if (env.IsDevelopment())
       {
@@ -46,6 +47,9 @@ namespace PhonebookApi
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PhonebookApi v1"));
       }
+
+      ILogger<Startup> logger = loggerFactory.CreateLogger<Startup>();
+      app.ConfigureExceptionHandler(logger);
 
       app.UseHttpsRedirection();
 

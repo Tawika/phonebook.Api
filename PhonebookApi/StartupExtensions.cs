@@ -8,22 +8,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PhonebookApi.Models.Database.Repository;
+using Microsoft.Extensions.Configuration;
 
 namespace PhonebookApi
 {
   public static class StartupExtensions
   {
-    public const string connectionString = "Data Source=Phonebook.db";
-
     public static void AddDataServices(this IServiceCollection services)
     {
+      services.AddScoped<PhonebookRepository>();
       services.AddScoped<PhonebookQueryService>();
       services.AddScoped<PhonebookCommandService>();
     }
 
-    public static void AddDatabaseServicesInMemorySQLlite(this IServiceCollection services)
+    public static void AddDatabaseServicesInMemorySQLlite(this IServiceCollection services, IConfiguration configuration)
     {
-      services.AddDbContext<DatabaseContext>(opt => opt.UseSqlite(connectionString));
+      services.AddDbContext<DatabaseContext>(opt => opt.UseSqlite(configuration.GetConnectionString("Main")));
     }
   }
 }
