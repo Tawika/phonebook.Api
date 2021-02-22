@@ -82,7 +82,7 @@ namespace PhonebookApi.ModelsTest.Tests
       Action act = () => _queryService.GetPhonebookWithPagedEntries(5, 0, "sam", "hello", true).GetAwaiter().GetResult();
 
       // Assert
-      Assert.Throws<Exception>(act);
+      Assert.Throws<System.ArgumentNullException>(act);
     }
 
     [Fact]
